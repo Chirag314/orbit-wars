@@ -3331,29 +3331,7 @@ def plan_moves(world, deadline=None):
             else:
                 prod_ratio = 1.0
 
-            pid = id(world)
-            turn = getattr(world, 'turn', 0)
 
-            # Update history: maintain last REAR_PROD_CONSECUTIVE_TURNS readings
-            if pid not in _rear_prod_history:
-                _rear_prod_history[pid] = []
-            hist = _rear_prod_history[pid]
-            hist.append((turn, prod_ratio))
-            # Keep only last N entries
-            while len(hist) > REAR_PROD_CONSECUTIVE_TURNS:
-                hist.pop(0)
-
-            # Compute sustained ratio: all history entries must pass threshold the same direction
-            if len(hist) >= REAR_PROD_CONSECUTIVE_TURNS:
-                all_ahead = all(r >= REAR_PROD_AHEAD_THRESHOLD for _, r in hist)
-                all_behind = all(r <= REAR_PROD_BEHIND_THRESHOLD for _, r in hist)
-                if all_ahead and not all_behind:
-                    adjustment = min(base_ratio * REAR_PROD_AHEAD_BOOST, base_ratio * REAR_PROD_MAX_BOUND)
-                    send_ratio = base_ratio + adjustment
-                elif all_behind and not all_ahead:
-                    adjustment = min(base_ratio * REAR_PROD_BEHIND_REDUCE, base_ratio * REAR_PROD_MAX_BOUND)
-                    send_ratio = base_ratio - adjustment
-                # else: mixed/no clear signal -> hold base_ratio
 
             if modes["is_finishing"]:
                 send_ratio = max(send_ratio, REAR_SEND_RATIO_FOUR_PLAYER)
