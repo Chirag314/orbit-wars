@@ -8,8 +8,10 @@
   "enable_gpu": "false",
   "enable_tpu": "false",
   "enable_internet": "false",
-  "dataset_sources": ["slawekbiel/producer-orbit-wars-utils"],
-  "competition_sources": ["orbit-wars"],
+  "dataset_sources": [],
+  "competition_sources": [
+    "orbit-wars"
+  ],
   "kernel_sources": [],
   "metadata_sources": []
 }
