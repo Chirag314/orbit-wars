@@ -1,0 +1,15 @@
+{
+  "id": "cid007/orbit-wars-v9-producer",
+  "title": "Orbit Wars v9 Producer",
+  "code_file": "kernel.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "false",
+  "enable_tpu": "false",
+  "enable_internet": "false",
+  "dataset_sources": ["slawekbiel/producer-orbit-wars-utils"],
+  "competition_sources": ["orbit-wars"],
+  "kernel_sources": [],
+  "metadata_sources": []
+}
