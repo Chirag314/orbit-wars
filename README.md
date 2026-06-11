@@ -19,8 +19,8 @@ orbit_wars/
 ├── competition_memo.md    — Full analysis report
 └── agents/
     ├── v1_starter/
-    │   └── submission.py  — Baseline: safar1/lb-score-1101 (~1101 rating)
-    └── v2_ajay_merge/     — (planned) Cherry-pick from ajayrao43/v12
+    │   └── submission.py  — Baseline: public-baseline-kernel (~1101 rating)
+    └── v2_ajay_merge/     — (planned) Cherry-pick from extended-heuristic-kernel
 ```
 
 ## Medal Targets
@@ -31,7 +31,7 @@ orbit_wars/
 | Gold | top 1% | top 37 | ~1600+ |
 
 ## Current Status
-- **v1_starter** (safar1 fork): ~1101 — at bronze floor
+- **v1_starter** (public-baseline fork): ~1101 — at bronze floor
 - **Next step**: Submit v1_starter as private Kaggle kernel, verify it posts a score
 
 ## Submission

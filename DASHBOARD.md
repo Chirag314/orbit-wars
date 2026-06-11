@@ -76,8 +76,8 @@ No parameter change, physics improvement, or evaluation fix escaped the ceiling.
 
 | # | Agent | Architecture | Best LB | Δ vs v1 | Status | Why It Matters |
 |:---:|:---|:---|:---:|:---:|:---:|:---|
-| v1 | `v1_starter` | safar1 heuristic · 3,605 lines | 1,072 | — | 💤 | Baseline; melis_evaluate bottleneck |
-| v2 | `v2_roman` | romantamrazov mission-based | 980 | −92 | 💤 | 1,224 in April → 980 in June (field evolved) |
+| v1 | `v1_starter` | public-baseline heuristic · 3,605 lines | 1,072 | — | 💤 | Baseline; melis_evaluate bottleneck |
+| v2 | `v2_roman` | mission-agent-kernel mission-based | 980 | −92 | 💤 | 1,224 in April → 980 in June (field evolved) |
 | v3 | `v3_pascal` | orbitbotnext (pascal) | 736 | −336 | 💤 | Runtime NameError on `_rear_prod_history` |
 | v4 | `v4_momentum` | fresh build: MC + minimax | — | — | ⛔ | Lost 0/10 locally; never submitted |
 | v5 | `v5_hybrid` | v1 + MC eval + momentum | 948 | −124 | 💤 | 2-rollout MC noise > heuristic signal |
@@ -158,7 +158,7 @@ roi_threshold    Behavior                  Local win vs v9   LB (est.)
 ─────────────    ────────────────────────  ────────────────  ─────────
     1.0          Very aggressive           untested          unknown
     1.2 ← v10   More launches per turn    75%  (9/12)       converging
-    1.5 ← v9   Default (slawekbiel)       50%  (baseline)   1,167
+    1.5 ← v9   Default (orbit_lite author)       50%  (baseline)   1,167
     2.0          Conservative             untested          unknown
 ```
 
@@ -174,7 +174,7 @@ The competition has ~3,676 teams. Approximate score distribution from leaderboar
 ```
 Score     Approx teams  Distribution
 ──────    ────────────  ──────────────────────────────────────────────
-1600+          ~5        ▌                 elite tier (Isaiah, 213tubo)
+1600+          ~5        ▌                 elite tier (competition leader, top competitor)
 1500–1599      ~32       ████              gold zone   ← 37 teams
 1400–1499      ~43       █████
 1300–1399      ~55       ███████
@@ -194,7 +194,7 @@ The top 5% boundary (rank 184) is currently around 1,226. That band holds ~90 te
 within a 60-point window — it's competitive but reachable.
 
 **Top of field context:**
-- Rank 1: Isaiah @ Tufa Labs — **1,679** (likely MCTS or deep rollout search)
+- Rank 1: competition leader — **1,679** (likely MCTS or deep rollout search)
 - Rank ~37: **~1,500** (gold floor)
 - Rank ~184: **~1,226** (silver floor) ← our target
 - Rank ~201: **1,167** ← us (current)
@@ -209,7 +209,7 @@ within a 60-point window — it's competitive but reachable.
 | v9_producer vs v1_starter | 10 | 0 | **100%** | orbit_lite completely dominates heuristic |
 | v10_tuned vs v9_producer | 9 | 3 | **75%** | roi=1.2 more aggressive, wins more |
 | v4_momentum vs v1_starter | 0 | 10 | **0%** | from-scratch 800 lines vs 3,600 tuned |
-| shummingfang48 vs v9 | 4 | 8 | **33%** | shum loses: size_multiplier per-turn overhead |
+| exp-agent-kernel vs v9 | 4 | 8 | **33%** | shum loses: size_multiplier per-turn overhead |
 
 ---
 
@@ -225,7 +225,7 @@ within a 60-point window — it's competitive but reachable.
 | expand_k tuning (v7) | More expansion sources = faster neutrals | travel_mid=22 cut off 23-50 unit neutrals | Parameter changes have cross-dependencies |
 | Real-sim eval (v8) | Exact physics = better decisions | Decision quality ≠ physics accuracy | The evaluation **architecture** was the bottleneck |
 | From-scratch build (v4) | Clean design, no tech debt | 800 lines vs 3,600 lines of tuned heuristics | Existing agents have thousands of implicit edge-case fixes |
-| romantamrazov fork (v2) | Scored 1,224 in April | Field evolved; same code scores 980 in June | Stale agents lose to field evolution, not opponents |
+| mission-agent-kernel fork (v2) | Scored 1,224 in April | Field evolved; same code scores 980 in June | Stale agents lose to field evolution, not opponents |
 
 </details>
 
@@ -252,8 +252,8 @@ within a 60-point window — it's competitive but reachable.
   ─────────────────────────────────────────────────────────────────────────
   ► NOW      Wait: v10_tuned (roi=1.2) converges       +30–60 pts?   passive
   ► HIGH     Try: horizon=22 (deeper planning)          unknown       1 kernel
-  ► HIGH     Monitor: shummingfang48 (99 votes)         observe       passive
-  ► MED      Decode: jek1wantaufik model (~1300 LB)     high value    1 day
+  ► HIGH     Monitor: exp-agent-kernel (99 votes)         observe       passive
+  ► MED      Decode: simplified-agent-kernel model (~1300 LB)     high value    1 day
   ► LOW      Terminal aggression: last 40 turns push    +10–20 pts    1 kernel
   ─────────────────────────────────────────────────────────────────────────
   TARGET     Silver medal by Jun 23                     need ~1226    13 days

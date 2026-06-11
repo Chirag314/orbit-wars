@@ -2,7 +2,7 @@
 
 ## Competition Phase
 Phase 1 — ACTIVE. Entry in progress. Deadline: June 23, 2026.
-Starting from safar1/lb-score-1101 (~1101 rating). Bronze threshold: ~top 366 of 3,656 teams.
+Starting from public-baseline-kernel (~1101 rating). Bronze threshold: ~top 366 of 3,656 teams.
 
 ## Task Summary
 Game AI competition. Submit a Python agent (`submission.py`) that plays Orbit Wars:
@@ -33,11 +33,11 @@ Agent returns: list of [from_planet_id, angle_radians, num_ships]
 
 ## Score Scale and Medal Thresholds
 As of June 2, 2026 (3,656 teams):
-- Top score: ~1817 (Isaiah @ Tufa Labs)
+- Top score: ~1817 (competition leader)
 - Gold: top ~37 teams (top 1%)
 - Silver: top ~183 teams (top 5%)
 - Bronze: top ~366 teams (top 10%) — estimated score ~1100–1150
-- Starting baseline (safar1 v1101): ~1101 — at/near bronze floor
+- Starting baseline (public-baseline-kernel): ~1101 — at/near bronze floor
 
 ## Hard Rules
 - Do not rescan the whole codebase unless asked
@@ -48,7 +48,7 @@ As of June 2, 2026 (3,656 teams):
 - Before editing, summarize current state + exact change
 - Prefer minimal diffs over rewrites
 
-## Current Agent Architecture (v1_starter — safar1 1101)
+## Current Agent Architecture (v1_starter — public-baseline-kernel)
 `agents/v1_starter/submission.py` — ~3,600 lines pure Python heuristic
 
 Key systems:
@@ -72,15 +72,15 @@ Known parameter knobs (config block at top):
 ## Experiment Queue
 | # | Experiment | Expected Gain | Cost |
 |---|---|---|---|
-| 1 | Fork safar1 to private kernel; verify it runs and posts a score | baseline | Low |
-| 2 | Diff ajayrao43/v12 (4869 lines) vs safar1 (3606 lines); cherry-pick improvements | +30–80 pts | Medium |
+| 1 | Fork public-baseline to private kernel; verify it runs and posts a score | baseline | Low |
+| 2 | Diff extended-heuristic-kernel (4869 lines) vs public-baseline (3606 lines); cherry-pick improvements | +30–80 pts | Medium |
 | 3 | Tune SO1/VALUE_WEIGHT/HAMMER params via local arena | +10–30 pts | Medium |
 | 4 | Improve 2P mode (currently always returns "pressure") | unknown | Medium |
 | 5 | Orbital aim improvement — precomputed path for comets | +?? | High |
 
 ## What We Know About the Top Agents
-- AjayRao43 `oribt-war-12` (56 votes) — extended fork of safar1, ~4869 lines; likely scores 1200+
-- vkhydras / penguin069 (55 votes) — independent implementation; worth studying for diversity
+- extended-heuristic-kernel (56 votes) — extended fork of public-baseline-kernel, ~4869 lines; likely scores 1200+
+- heuristic-variant-kernel / independent-impl-kernel (55 votes) — independent implementation; worth studying for diversity
 - Top agents (1600+) appear to use deeper search, better 2P handling, and possibly MCTS
 - No public RL agents are competitive yet (too slow per turn)
 

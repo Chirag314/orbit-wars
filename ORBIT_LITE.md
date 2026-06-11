@@ -1,7 +1,7 @@
 # orbit_lite — Architecture Notes
 
-The `orbit_lite` library (slawekbiel/producer-orbit-wars-utils) is the
-foundation of the top mid-tier agents (slawekbiel, romantamrazov_v2).
+The `orbit_lite` library (orbit_lite-producer-kernel) is the
+foundation of the top mid-tier agents (orbit_lite-author, mission-agent-v2).
 
 ## Package Structure
 
@@ -80,7 +80,7 @@ next to it when extracted from the archive.
 
 ## Tuning Opportunities
 
-The current agent uses slawekbiel's default ProducerLiteConfig. Potential
+The current agent uses the library author's default ProducerLiteConfig. Potential
 improvements:
 - `roi_threshold`: lower (1.0?) = more aggressive, more fleet dispatches
 - `horizon`: increase (24?) = deeper planning but slower per turn

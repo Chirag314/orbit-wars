@@ -505,8 +505,8 @@ ax8.set_xticks([]); ax8.set_yticks([])
 steps = [
     (">>", "Wait for v10_tuned (roi=1.2) to converge",        "~1200+ target",   ORB_ORG),
     ("->", "Try horizon=22 (deeper planning)",                 "+?? pts",          ORB_BLUE),
-    ("->", "Monitor shummingfang48 evolution (99 votes)",      "observe",          ORB_BLUE),
-    ("??", "Understand jek1wantaufik private model (~1300 LB)","high value",       ORB_PUR),
+    ("->", "Monitor exp-agent-kernel evolution (99 votes)",      "observe",          ORB_BLUE),
+    ("??", "Understand simplified-agent-kernel private model (~1300 LB)","high value",       ORB_PUR),
     ("!!", "Terminal phase aggression (last 40 turns)",        "+10-20 pts",       ORB_GRN),
 ]
 for i, (icon, text, note, col) in enumerate(steps):

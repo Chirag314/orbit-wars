@@ -63,35 +63,35 @@
 
 ## 3. Leaderboard Analysis (June 2, 2026)
 
-### Top 20 Scores
+### Top 20 Scores (Jun 2, 2026 snapshot — names redacted)
 ```
-1.  Isaiah @ Tufa Labs     1816.9
-2.  Jake Will              1683.0
-3.  typeIIIfairy           1639.0
-4.  Vadasz                 1610.5
-5.  3Comets                1609.0
-6.  TonyK                  1602.6
-7.  Zachary Ruhe           1592.1
-8.  213tubo                1576.6
-9.  bowwowforeach          1560.4
-10. dragon warrior         1549.8
-11. Audun Ljone Henriksen  1529.6
-12. Maruichi01             1518.4
-13. C404                   1512.2
-14. flg                    1507.2
-15. One Man Wrecking Machine 1505.8
-16. Boey                   1502.6
-17. Controlvector          1490.9
-18. skalermo               1478.1
-19. saharan                1476.2
-20. Hober Malloc           1471.9
+ 1.  [Competitor 01]   1816.9
+ 2.  [Competitor 02]   1683.0
+ 3.  [Competitor 03]   1639.0
+ 4.  [Competitor 04]   1610.5
+ 5.  [Competitor 05]   1609.0
+ 6.  [Competitor 06]   1602.6
+ 7.  [Competitor 07]   1592.1
+ 8.  [Competitor 08]   1576.6
+ 9.  [Competitor 09]   1560.4
+10.  [Competitor 10]   1549.8
+11.  [Competitor 11]   1529.6
+12.  [Competitor 12]   1518.4
+13.  [Competitor 13]   1512.2
+14.  [Competitor 14]   1507.2
+15.  [Competitor 15]   1505.8
+16.  [Competitor 16]   1502.6
+17.  [Competitor 17]   1490.9
+18.  [Competitor 18]   1478.1
+19.  [Competitor 19]   1476.2
+20.  [Competitor 20]   1471.9
 ```
 
 ### Key Observations
 - Top-1 gap to Top-20: 345 points — significant, but scores are compressing mid-field
 - Field is still improving; expect scores to rise ~10% by deadline
 - Bronze floor estimated ~1100–1150 based on field size and score distribution
-- **Our baseline (safar1 1101)** is right at estimated bronze — need +50–100 pts to be safely in
+- **Our baseline (public-baseline-kernel)** is right at estimated bronze — need +50–100 pts to be safely in
 
 ### Score Distribution Estimate
 Based on the top-20 range (1471–1817) and a typical Glicko distribution:
@@ -104,7 +104,7 @@ Based on the top-20 range (1471–1817) and a typical Glicko distribution:
 
 ## 4. Public Agent Analysis
 
-### safar1/lb-score-1101 (our v1 baseline)
+### public-baseline-kernel (our v1 baseline)
 - ~3,606 lines of pure Python heuristic
 - **Confirmed rating: ~1101** (at/near bronze floor)
 - Architecture: `World` state parser → `forward_project()` → `melis_evaluate()` → tactical systems
@@ -117,25 +117,25 @@ Based on the top-20 range (1471–1817) and a typical Glicko distribution:
   MELIS_SANITY_THETA = 3.0         # 2P sanity gate
   ```
 
-### ajayrao43/oribt-war-12 (best public kernel, 56 votes)
-- ~4,869 lines — 1,263 lines added over safar1
-- Appears to be a direct extension of safar1 codebase
+### extended-heuristic-kernel (best public kernel, 56 votes)
+- ~4,869 lines — 1,263 lines added over public-baseline
+- Appears to be a direct extension of public-baseline codebase
 - Contains more inline comments; added features unknown without deeper diff
 - Likely scores 1150–1250 based on vote count and recency
 
-### penguin069/copied-from-vkhydras-some-edits (55 votes)
+### independent-impl-kernel (55 votes)
 - Independent implementation
 - May offer genuine architectural diversity
 - Worth studying for alternative approaches (not just param tweaks)
 
-### ShumingFang (multiple exp28–31, 18–35 votes each)
+### exp-agent-kernel (multiple exp28–31, 18–35 votes each)
 - Active iterating competitor
-- Exp29–31 are near-identical (testing small changes) — similar to our BirdCLEF approach
+- Kernel iterations are near-identical (testing small changes) — similar to our BirdCLEF approach
 - Good proxy for mid-field competition velocity
 
 ---
 
-## 5. Agent Architecture Deep Dive (safar1 v1101)
+## 5. Agent Architecture Deep Dive (public-baseline v1101)
 
 ### Core Loop (per turn)
 ```
@@ -183,17 +183,17 @@ Computes on init:
 
 ### Tier 1: Quick Wins (Days 1–5, estimated +30–100 pts)
 1. **Submit v1_starter**: Get a live score as baseline. Validate we understand submission format.
-2. **Diff ajayrao43 vs safar1**: ~1,263 added lines. Cherry-pick meaningful new logic.
+2. **Diff extended-heuristic-kernel vs public-baseline**: ~1,263 added lines. Cherry-pick meaningful new logic.
    - Focus: new tactical systems, 2P improvements, any new HAMMER variants
 3. **Fix 2P mode detection**: `_detect_mode()` always returns "pressure" in 2P — this is a stub that may hurt. Study what "patience" would look like in 2P.
 
 ### Tier 2: Targeted Improvements (Days 5–14, estimated +50–150 pts)
-4. **Local arena testing**: Download `penguin069/orbit-wars-local-arena` dataset, run agents against each other locally to test changes without Kaggle submissions.
+4. **Local arena testing**: Download `local-arena-dataset` dataset, run agents against each other locally to test changes without Kaggle submissions.
 5. **Parameter sweep on MELIS weights**: score = ships + 5×planets + 8×prod. Try different weights for 2P vs 4P.
 6. **Orbital aim accuracy**: Current `aim_at_target()` iterates 6 times but converges by distance, not angle error. Potential aim miss on fast orbital planets.
 
 ### Tier 3: Research (Days 14–21, +100–300 pts if successful)
-7. **Deeper look at top-1817 agent** (Isaiah @ Tufa Labs): Private — can only observe via LB position. Check if they have public notebooks or forum posts.
+7. **Deeper look at top-1817 agent** (competition leader): Private — can only observe via LB position. Check if they have public notebooks or forum posts.
 8. **Time-limited MCTS**: 1-step lookahead is current depth. Adding even 2-step with pruning could matter for 2P endgame.
 9. **Better endgame**: Late-game (turn 450+) flush logic is basic. Production-weighted optimal redistribution matters.
 
@@ -212,7 +212,7 @@ Create a Kaggle notebook that:
 1. Writes `submission.py` to `/kaggle/working/`
 2. Set as a competition submission output
 
-This matches the safar1 pattern (kernel output is `submission.py`).
+This matches the public-baseline pattern (kernel output is `submission.py`).
 
 ### Submission Limits
 - 5 submissions per day
@@ -235,7 +235,7 @@ This matches the safar1 pattern (kernel output is `submission.py`).
 ## 9. Resources
 
 - Competition rules: https://www.kaggle.com/competitions/orbit-wars/rules
-- Local arena dataset: `kaggle datasets download penguin069/orbit-wars-local-arena`
-- Safar1 baseline: `/data/orbit_wars/agents/v1_starter/submission.py`
-- Ajayrao43 v12: `kaggle kernels output ajayrao43/oribt-war-12` (already at `/tmp/orbit_ajay/submission.py`)
-- Penguin069 independent: `kaggle kernels output penguin069/copied-from-vkhydras-some-edits`
+- Local arena dataset: `kaggle datasets download local-arena-dataset`
+- Public baseline kernel: `/data/orbit_wars/agents/v1_starter/submission.py`
+- extended-heuristic-kernel v12: `kaggle kernels output extended-heuristic-kernel` (already at `/tmp/orbit_ajay/submission.py`)
+- Local arena kernel: `kaggle kernels output [independent-impl-kernel]`

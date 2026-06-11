@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+*.log
+
+# Competitor reference agents (kept locally, not published)
+agents/ajayrao43_v12/
+agents/debatreyabiswas/
+agents/djenkivanov/
+agents/jek1wantaufik/
+agents/kuni05/
+agents/pascalledesma/
+agents/pascalledesma_v14/
+agents/romantamrazov/
+agents/romantamrazov_v2/
+agents/romantamrazov_v3/
+agents/shummingfang/
+agents/shummingfang48/
+agents/slawekbiel/
+agents/vkhydras/
+agents/v2_ajay_ref/

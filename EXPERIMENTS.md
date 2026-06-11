@@ -5,7 +5,7 @@ Detailed record of every agent experiment, what changed, and what happened.
 ---
 
 ## v1_starter — Baseline
-**Source:** safar1/lb-score-1101 (public Kaggle kernel)  
+**Source:** public-baseline-kernel (public Kaggle kernel)  
 **Lines:** 3605  
 **LB Score:** 1072 (peak Jun 4), ~980 after field strengthened  
 **Architecture:** Multi-horizon heuristic with HAMMER, COALITION, ANTI_SNIPE  
@@ -15,19 +15,19 @@ Key systems: `melis_evaluate` (forward projection), `search_step_action`,
 
 ---
 
-## v2_roman — romantamrazov Fork
-**Source:** romantamrazov/orbit-star-wars-lb-max-1224  
+## v2_roman — mission-agent-kernel Fork
+**Source:** mission-agent-kernel  
 **Lines:** 3307  
 **LB Score:** ~980 (April-vintage tuning doesn't survive field evolution)  
 **What's different:** Mission-based planning (build_gang_up_missions,
 build_elimination_missions, build_reinforce_missions), crash exploit  
-**Lesson:** romantamrazov's April score (1224) was vs weaker field.
+**Lesson:** mission-agent-kernel's April score (1224) was vs weaker field.
 Same code scores ~980 in June.
 
 ---
 
 ## v3_pascal — orbitbotnext (Fixed)
-**Source:** pascalledesma/orbitbotnext (Candidate 054)  
+**Source:** orbit-next-kernel (Candidate 054)  
 **Lines:** 3500  
 **LB Score:** 736 (disappointing)  
 **Bug found:** `_rear_prod_history` referenced but never defined → NameError
@@ -111,7 +111,7 @@ framework is the bottleneck.
 ---
 
 ## v9_producer — orbit_lite BREAKTHROUGH ★
-**Source:** slawekbiel/the-producer-agent + orbit_lite PyTorch library  
+**Source:** orbit_lite-producer-kernel + orbit_lite PyTorch library  
 **Lines:** 369 (main.py) + 4439 (orbit_lite package)  
 **LB Score:** **1191.6** (~rank 200/3676, top 5.4%)  
 **Submitted as:** submission.tar.gz (main.py + orbit_lite/ directory)  
