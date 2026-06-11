@@ -1,0 +1,16 @@
+{
+  "id": "cid007/orbit-wars-v14-roi10",
+  "title": "Orbit Wars v14_roi10",
+  "code_file": "kernel.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "false",
+  "enable_tpu": "false",
+  "enable_internet": "false",
+  "dataset_sources": [],
+  "competition_sources": [
+    "orbit-wars"
+  ],
+  "kernel_sources": []
+}
