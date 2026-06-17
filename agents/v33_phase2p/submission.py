@@ -272,17 +272,7 @@ def run_turn(obs_tensors: dict, *, config: ProducerLiteConfig, player_count: int
     ``memory`` must expose a mutable ``movement`` attribute (the rolling cache).
     """
     _step = int(obs_tensors["step"].item()) if hasattr(obs_tensors["step"], "item") else int(obs_tensors["step"])
-    if int(player_count) <= 2:
-        # 2P: defend more planets and regroup earlier/farther without touching offense.
-        # Replay analysis: we collapse after expansion because threatened planets can't
-        # pull reinforcement fast enough. Defend 8 planets (was 4), regroup at lower
-        # pressure delta (0.1 vs 0.25), and allow ships to travel further to regroup (10 vs 7).
-        config = dataclasses.replace(config,
-            max_defensive_targets=8,
-            regroup_pressure_delta_min=0.1,
-            max_regroup_time=10.0,
-            max_regroup_targets_per_source=12,
-        )
+    _ = _step  # step available for future phase logic
     device = obs_tensors["planets"].device
     obs = parse_obs(obs_tensors)
     P = obs.P
@@ -370,6 +360,128 @@ _RUNTIME = ProducerLiteRuntime()
 
 
 # ---------------------------------------------------------------------------
+# HAMMER: coordinated multi-source pile-on (post-process orbit_lite output)
+# ---------------------------------------------------------------------------
+# orbit_lite fires one source per target per turn. When no single source has
+# enough ships to flip a defended enemy planet, all sources scatter to other
+# targets. HAMMER detects this case and routes 2-3 idle sources to the same
+# high-value target simultaneously, providing the combined mass needed to flip.
+
+import math as _math
+
+def _ham_speed(ships: float) -> float:
+    s = max(ships, 1.0)
+    return 1.0 + 5.0 * (_math.log(s) / _math.log(1000.0)) ** 1.5
+
+def _ham_intercept(sx: float, sy: float, tx0: float, ty0: float,
+                   t_r_sun: float, ang_vel: float, ships: float):
+    """Fixed-point intercept aim (5 iters). Returns (angle, eta)."""
+    sun = 50.0
+    speed = _ham_speed(ships)
+    tx, ty = tx0, ty0
+    dist = _math.sqrt((tx - sx) ** 2 + (ty - sy) ** 2)
+    eta = dist / max(speed, 1e-9)
+    for _ in range(5):
+        if t_r_sun < 50.0:
+            theta0 = _math.atan2(ty0 - sun, tx0 - sun)
+            th = theta0 + ang_vel * eta
+            tx = sun + t_r_sun * _math.cos(th)
+            ty = sun + t_r_sun * _math.sin(th)
+        else:
+            tx, ty = tx0, ty0
+        dist = _math.sqrt((tx - sx) ** 2 + (ty - sy) ** 2)
+        eta = dist / max(speed, 1e-9)
+    return _math.atan2(ty - sy, tx - sx), eta
+
+def _ham_sun_blocked(sx: float, sy: float, tx: float, ty: float,
+                     sun_r: float = 11.5) -> bool:
+    """True if the straight-line path passes within sun_r of sun (50, 50)."""
+    cx = cy = 50.0
+    dx, dy = tx - sx, ty - sy
+    L2 = dx*dx + dy*dy
+    if L2 < 1e-12:
+        return False
+    t = max(0.0, min(1.0, ((cx - sx)*dx + (cy - sy)*dy) / L2))
+    px, py = sx + t*dx, sy + t*dy
+    return (px - cx)**2 + (py - cy)**2 < sun_r**2
+
+def _hammer_supplement(obs: dict, base_actions: list, player_id: int) -> list:
+    """Append coordinated HAMMER strikes to orbit_lite's base actions.
+
+    Finds the highest-value enemy planet that no single idle source can flip
+    alone but 2-3 combined can (combined ships ≥ garrison × 2 + 10), then
+    fires all of them at that target. Only uses planets orbit_lite did NOT
+    already deploy this turn. Purely additive — never removes base actions.
+    """
+    planets = obs.get("planets", [])
+    step = int(obs.get("step", 0))
+    ang_vel = float(obs.get("angular_velocity", 0.03))
+    sun = 50.0
+
+    # Let orbit_lite handle the expansion phase alone
+    if step < 40:
+        return base_actions
+
+    deployed_ids = {int(a[0]) for a in base_actions}
+
+    idle_sources, enemy_targets = [], []
+    for p in planets:
+        pid, owner = int(p[0]), int(p[1])
+        x, y, ships, prod = float(p[2]), float(p[3]), float(p[5]), float(p[6])
+        r_sun = _math.sqrt((x - sun)**2 + (y - sun)**2)
+        if owner == player_id and ships >= 12.0 and pid not in deployed_ids:
+            idle_sources.append((pid, x, y, ships, r_sun))
+        elif 0 <= owner != player_id:
+            enemy_targets.append((pid, x, y, ships, prod, r_sun))
+
+    if len(idle_sources) < 2 or not enemy_targets:
+        return base_actions
+
+    # Rank targets: high production, low garrison
+    enemy_targets.sort(key=lambda t: t[4] * 3.0 / (t[3] + 8.0), reverse=True)
+
+    for t_id, t_x, t_y, garrison, prod, t_r_sun in enemy_targets:
+        # Sort idle sources by distance to this target
+        idle_sources.sort(key=lambda s: (s[1]-t_x)**2 + (s[2]-t_y)**2)
+
+        combo, total = [], 0.0
+        for src in idle_sources[:4]:
+            send = int(src[3] * 0.65)  # send 65%, keep 35% as garrison reserve
+            if send >= 8:
+                combo.append((src, send))
+                total += send
+            if len(combo) == 3:
+                break
+
+        # Need ≥2 sources AND combined ships ≥ 2× garrison for overwhelming force
+        if len(combo) < 2 or total < garrison * 2.0 + 10:
+            continue
+
+        # Fire the HAMMER: append strike for each combo source
+        new_actions = list(base_actions)
+        fired = False
+        for (p_id, px, py, p_ships, p_r_sun), send in combo:
+            angle, eta = _ham_intercept(px, py, t_x, t_y, t_r_sun, ang_vel, send)
+            # Predict actual target pos at eta to check sun collision on that path
+            if t_r_sun < 50.0:
+                theta0 = _math.atan2(t_y - sun, t_x - sun)
+                th = theta0 + ang_vel * eta
+                aim_x = sun + t_r_sun * _math.cos(th)
+                aim_y = sun + t_r_sun * _math.sin(th)
+            else:
+                aim_x, aim_y = t_x, t_y
+            if _ham_sun_blocked(px, py, aim_x, aim_y):
+                continue
+            new_actions.append([p_id, float(angle), int(send)])
+            fired = True
+
+        if fired:
+            return new_actions
+
+    return base_actions
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
@@ -380,4 +492,5 @@ def agent(obs):
     obs_tensors = single_obs_to_tensor(obs, player_id=player_id)
     with torch.no_grad():
         sparse_row = _RUNTIME.tensor_action(obs_tensors)
-    return sparse_action_row_to_moves(sparse_row, obs, player_id=player_id)
+    moves = sparse_action_row_to_moves(sparse_row, obs, player_id=player_id)
+    return _hammer_supplement(obs, moves, player_id)
