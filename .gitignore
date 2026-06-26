@@ -23,10 +23,6 @@ agents/slawekbiel/
 agents/vkhydras/
 agents/v2_ajay_ref/
 
-# Strategy and internal documentation (not for public)
+# Internal documentation (not for public)
 CLAUDE.md
 competition_memo.md
-DASHBOARD.md
-EXPERIMENTS.md
-PROGRESS.md
-FINAL_RESULTS.md
