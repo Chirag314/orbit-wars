@@ -31,9 +31,11 @@ teams to the leaderboard. That reshuffles percentile-based medal cutoffs even wh
 individual agent's own score barely moves.
 
 **Current bronze math:** top 10% of 4,730 teams = rank ≤ 473. We're at rank 508 —
-**35 ranks away.** The old bronze score cutoff (1172.8) was computed against the
-1,820-team field and is stale; treat the rank-based gap as the reliable signal, not
-the old score threshold.
+**35 ranks away.** Live bronze score cutoff confirmed at **1087.6** — we're at 1087.2,
+just **0.4 points away**. Team count (4,730) is now fixed — no more teams are being
+added, so the denominator won't move further; only scores (via remaining episodes)
+can still shift the ranking from here. The old bronze score cutoff (1172.8) was
+computed against the stale 1,820-team field — ignore it.
 
 **Timeline:** per the competition rules, there's an official Final Evaluation Period
 from Jun 24 to ~Jul 8, during which Kaggle keeps running games against frozen
