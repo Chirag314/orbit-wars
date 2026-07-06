@@ -12,9 +12,17 @@ backlog was still draining. Live leaderboard as of Jul 5:
 
 | Metric | Jun 26 read | Jul 5 read (live) | Δ |
 |---|---|---|---|
-| Score | 1037.6 | **1082.7** | +45.1 |
+| Score | 1037.6 | **1087.2** | +49.6 |
 | Rank | 841 / 1820 | **508 / 4730** | |
 | Percentile | top 46.2% | **top 10.7%** | |
+
+**Episode volume (best submission, `v36_submission.tar.gz`, id 53965498):** 302 total
+episodes (1 validation + 301 real games), running since 2026-06-23 03:31, most recent
+2026-07-06 04:48 — **~23 games/day**, roughly one game/hour. At that pace, expect
+~40-50 more episodes before the Final Evaluation Period closes. Check anytime with:
+```
+kaggle competitions episodes 53965498
+```
 
 **Why the field size nearly tripled (1,820 → 4,730 teams):** the Jun 26 leaderboard
 only included teams whose episodes had already finished processing. Thousands more

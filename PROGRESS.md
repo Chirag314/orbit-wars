@@ -14,7 +14,10 @@
 
 | Metric | Score | Rank | Percentile |
 |---|---|---|---|
-| Live | **1082.7** | **508 / 4730** | top 10.7% |
+| Live | **1087.2** | **508 / 4730** | top 10.7% |
+
+**Episode pace (best submission, id 53965498):** 302 episodes played since 2026-06-23,
+~23 games/day (~1/hour). Check live count with `kaggle competitions episodes 53965498`.
 
 Bronze (top 10%) needs rank ≤ 473 — **35 ranks away**. Leaderboard is still settling
 during Kaggle's official Final Evaluation Period (Jun 24 – ~Jul 8), which clears the
