@@ -1,7 +1,36 @@
 # Orbit Wars Competition — Final Results & Lessons Learned
 
 **Competition ended:** June 23, 2026  
-**Our result:** #841 / 1820 teams | Score: 1037.6 | No medal (Bronze: 1172.8)
+**Result at Jun 26 read:** #841 / 1820 teams | Score: 1037.6 | No medal (Bronze: 1172.8)
+
+---
+
+## 📡 Post-Deadline Update (Jul 5, 2026)
+
+The Jun 26 numbers above were **not actually final** — Kaggle's episode-processing
+backlog was still draining. Live leaderboard as of Jul 5:
+
+| Metric | Jun 26 read | Jul 5 read (live) | Δ |
+|---|---|---|---|
+| Score | 1037.6 | **1082.7** | +45.1 |
+| Rank | 841 / 1820 | **508 / 4730** | |
+| Percentile | top 46.2% | **top 10.7%** | |
+
+**Why the field size nearly tripled (1,820 → 4,730 teams):** the Jun 26 leaderboard
+only included teams whose episodes had already finished processing. Thousands more
+teams' games cleared the queue over the following ~12 days, adding ~2,900 newly-scored
+teams to the leaderboard. That reshuffles percentile-based medal cutoffs even when an
+individual agent's own score barely moves.
+
+**Current bronze math:** top 10% of 4,730 teams = rank ≤ 473. We're at rank 508 —
+**35 ranks away.** The old bronze score cutoff (1172.8) was computed against the
+1,820-team field and is stale; treat the rank-based gap as the reliable signal, not
+the old score threshold.
+
+**Timeline:** per the competition rules, there's an official Final Evaluation Period
+from Jun 24 to ~Jul 8, during which Kaggle keeps running games against frozen
+submissions until the leaderboard converges. ~2-3 days left. This section will be
+updated again once that window closes.
 
 ---
 

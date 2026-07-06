@@ -1,8 +1,25 @@
 # Orbit Wars — Competition Progress Report
 
 **Competition:** [Orbit Wars](https://www.kaggle.com/competitions/orbit-wars)  
-**Deadline:** June 23, 2026  
+**Deadline:** June 23, 2026 (passed — see live update below)  
 **Team:** cid007 (Chirag Desai)
+
+> **Note:** everything below this point is a mid-competition snapshot from
+> early June (v9_producer era). For the actual competition outcome and
+> post-deadline leaderboard settling, see [FINAL_RESULTS.md](FINAL_RESULTS.md).
+
+---
+
+## 📡 Live Update (Jul 5, 2026) — 2 days left before leaderboard locks
+
+| Metric | Score | Rank | Percentile |
+|---|---|---|---|
+| Live | **1082.7** | **508 / 4730** | top 10.7% |
+
+Bronze (top 10%) needs rank ≤ 473 — **35 ranks away**. Leaderboard is still settling
+during Kaggle's official Final Evaluation Period (Jun 24 – ~Jul 8), which clears the
+post-deadline episode backlog (team count grew from 1,820 to 4,730 since the Jun 26
+read). Full detail in [FINAL_RESULTS.md](FINAL_RESULTS.md).
 
 ---
 
