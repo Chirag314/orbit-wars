@@ -19,11 +19,12 @@
 **Episode pace (best submission, id 53965498):** 302 episodes played since 2026-06-23,
 ~23 games/day (~1/hour). Check live count with `kaggle competitions episodes 53965498`.
 
-Bronze (top 10%) needs rank ≤ 473 — **35 ranks away**, and score-wise the live bronze
-cutoff is **1087.6** vs our 1087.2 — just **0.4 points away**. Team count (4,730) is
-now fixed; only remaining episodes can move the ranking from here. Leaderboard settles
-fully at the end of Kaggle's official Final Evaluation Period (Jun 24 – ~Jul 8). Full
-detail in [FINAL_RESULTS.md](FINAL_RESULTS.md).
+Bronze (top 10%) needs rank ≤ 473. Team count (4,730) is now fixed; only remaining
+episodes can move the ranking from here. **Trend has reversed since Jul 5:** peaked
+~1101 after a win streak, then dropped to **1085.8** on a 7W-10L stretch (~41% win
+rate) over the last 17 episodes — gap to the ~1087.6 bronze cutoff has widened back
+to ~1.8+ pts. Leaderboard settles fully at the end of Kaggle's official Final
+Evaluation Period (Jun 24 – ~Jul 8). Full detail in [FINAL_RESULTS.md](FINAL_RESULTS.md).
 
 ---
 

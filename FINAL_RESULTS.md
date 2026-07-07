@@ -30,12 +30,22 @@ teams' games cleared the queue over the following ~12 days, adding ~2,900 newly-
 teams to the leaderboard. That reshuffles percentile-based medal cutoffs even when an
 individual agent's own score barely moves.
 
-**Current bronze math:** top 10% of 4,730 teams = rank ≤ 473. We're at rank 508 —
-**35 ranks away.** Live bronze score cutoff confirmed at **1087.6** — we're at 1087.2,
-just **0.4 points away**. Team count (4,730) is now fixed — no more teams are being
-added, so the denominator won't move further; only scores (via remaining episodes)
-can still shift the ranking from here. The old bronze score cutoff (1172.8) was
-computed against the stale 1,820-team field — ignore it.
+**Current bronze math:** top 10% of 4,730 teams = rank ≤ 473. Team count (4,730) is now
+fixed — no more teams are being added, so only scores (via remaining episodes) can
+still shift the ranking from here. The old bronze score cutoff (1172.8) was computed
+against the stale 1,820-team field — ignore it.
+
+**Score trend has reversed (Jul 6-7 update):** peaked around ~1101 on Jul 6 morning
+after a 3-win streak, but a sustained losing patch pulled it back down —
+**7 wins / 10 losses over the last 17 episodes (~41% win rate)**. Latest read:
+**1085.8**, vs bronze cutoff ~1087.6 (as of Jul 5) — gap has widened back to ~1.8+ pts.
+Verified match-by-match via `kaggle competitions replay <episode_id>` — decode with:
+```python
+import json
+d = json.load(open('episode-<id>-replay.json'))
+names = d['info']['TeamNames']; rewards = d['rewards']
+# rank 1 (highest reward) = win
+```
 
 **Timeline:** per the competition rules, there's an official Final Evaluation Period
 from Jun 24 to ~Jul 8, during which Kaggle keeps running games against frozen
