@@ -37,8 +37,7 @@ against the stale 1,820-team field — ignore it.
 
 **Score trend has reversed (Jul 6-7 update):** peaked around ~1101 on Jul 6 morning
 after a 3-win streak, but a sustained losing patch pulled it back down —
-**7 wins / 10 losses over the last 17 episodes (~41% win rate)**. Latest read:
-**1085.8**, vs bronze cutoff ~1087.6 (as of Jul 5) — gap has widened back to ~1.8+ pts.
+**7 wins / 11 losses over the last 18 episodes (~39% win rate)**.
 Verified match-by-match via `kaggle competitions replay <episode_id>` — decode with:
 ```python
 import json
@@ -46,6 +45,17 @@ d = json.load(open('episode-<id>-replay.json'))
 names = d['info']['TeamNames']; rewards = d['rewards']
 # rank 1 (highest reward) = win
 ```
+
+**Ground-truth leaderboard pull (Jul 7, via `kaggle competitions leaderboard orbit-wars -d`):**
+this downloads the *entire* public leaderboard as a CSV — exact rank/score per team,
+no more estimating. Current numbers:
+- **Our rank: 495/4730**, score **1084.3**
+- **Bronze cutoff (rank 473): score 1088.8** — up from 1087.6 a day earlier (the bronze
+  line itself is drifting too, not just our score)
+- **Gap: 22 ranks / 4.5 points**
+- The 1087-1090 score band is extremely dense (dozens of teams within ~2 pts of each
+  other), so rank position is volatile even on small score moves — don't over-read
+  single-point rank swings
 
 **Timeline:** per the competition rules, there's an official Final Evaluation Period
 from Jun 24 to ~Jul 8, during which Kaggle keeps running games against frozen

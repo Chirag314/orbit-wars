@@ -21,10 +21,16 @@
 
 Bronze (top 10%) needs rank ≤ 473. Team count (4,730) is now fixed; only remaining
 episodes can move the ranking from here. **Trend has reversed since Jul 5:** peaked
-~1101 after a win streak, then dropped to **1085.8** on a 7W-10L stretch (~41% win
-rate) over the last 17 episodes — gap to the ~1087.6 bronze cutoff has widened back
-to ~1.8+ pts. Leaderboard settles fully at the end of Kaggle's official Final
-Evaluation Period (Jun 24 – ~Jul 8). Full detail in [FINAL_RESULTS.md](FINAL_RESULTS.md).
+~1101 after a win streak, then dropped on a 7W-11L stretch (~39% win rate) over the
+last 18 episodes.
+
+**Ground-truth check (Jul 7, full leaderboard CSV via `kaggle competitions leaderboard
+orbit-wars -d`):** we're at **rank 495/4730, score 1084.3**. Bronze cutoff (rank 473)
+is **1088.8** — up from 1087.6 the day before, so the cutoff itself is moving, not just
+us. Gap: **22 ranks / 4.5 points**. The 1087-1090 zone is very densely packed, so small
+score changes swing rank a lot. Leaderboard settles fully at the end of Kaggle's
+official Final Evaluation Period (Jun 24 – ~Jul 8). Full detail in
+[FINAL_RESULTS.md](FINAL_RESULTS.md).
 
 ---
 
