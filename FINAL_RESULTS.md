@@ -5,6 +5,19 @@
 
 ---
 
+## 🏁 TRUE FINAL RESULT (locked Jul 8, 2026 — private score revealed)
+
+**Rank #648 / 4,730 teams | Score: 1064.9 | No medal** (Bronze cutoff: rank 473, score 1089.5)
+
+Missed bronze by **175 ranks / 24.6 points**. The score peaked around ~1101 on Jul 6
+morning after a win streak, but a sustained losing stretch (~39% win rate over the
+last 18 tracked episodes, including several 4P losses) pulled it down to 1064.9 by
+lock time — see the Jul 5-8 conversation log for the episode-by-episode tracking.
+10,295 registrations, 5,196 participants, 4,729 teams, 9,047 submissions, 121 countries
+(per Kaggle's official recap).
+
+---
+
 ## 📡 Post-Deadline Update (Jul 5, 2026)
 
 The Jun 26 numbers above were **not actually final** — Kaggle's episode-processing
@@ -74,11 +87,13 @@ updated again once that window closes.
 | 4 | Felix M Neumann | 1522.6 | Consistent top 5 |
 | 5 | Hober Malloc | 1518.7 | |
 | ... | ... | ... | |
-| 841 | **Chirag Desai (Us)** | **1037.6** | Missed Bronze by 135 pts |
+| 841 | **Chirag Desai (Us)** | **1037.6** | Stale Jun 26 read — see TRUE FINAL RESULT above |
 
-**Gold (top 1%):** 1414.6  
-**Silver (top 5%):** 1248.9  
-**Bronze (top 10%):** 1172.8
+**Stale Jun 26 cutoffs (1,820-team field, since superseded):**
+Gold 1414.6 | Silver 1248.9 | Bronze 1172.8
+
+**True final cutoffs (4,730-team field, locked Jul 8):**
+Gold (rank 47) 1349.0 | Silver (rank 236) 1136.0 | **Bronze (rank 473) 1089.5**
 
 ---
 
@@ -153,6 +168,76 @@ Newly published high-voted kernels (likely from top teams):
 - Deeper MCTS or policy-gradient search
 - Learned value functions (RL pre-training)
 - Game-state clustering for adaptive play
+
+---
+
+## 🔬 Post-Competition Solution Writeups (read Jul 8, after final lock)
+
+Official recap: 10,295 registrations, 5,196 participants, 4,729 teams, 9,047 submissions,
+121 countries. Read the actual top-placing writeups from the discussion forum
+(`kaggle competitions topics list/show orbit-wars`) — here's what they did and how it
+maps to what we did or missed.
+
+### #1 place — Isaiah @ Tufa Labs — "Scaling Reinforcement Learning to the Stars"
+Pure self-play PPO, 200M-parameter transformer, **15 billion training steps**, 8×B200
+GPUs (~2,400 B200-hours total, multi-node). Entity-based observation (planets/fleets/
+comets as tokens), simple action space (launch y/n + target + continuous fleet size).
+4-bit quantized to fit the 100MiB submission cap. **Not replicable at our scale** — this
+confirms our CLAUDE.md assumption "no public RL agent is competitive yet" was **wrong**;
+RL wasn't just competitive, it dominated 1st place. Notable finding: **matchmaking ratio
+flipped from 2P-heavy to 4P-heavy right after the submission deadline** — he over-tuned
+for 2P assuming it'd stay 2P-dominant and got caught out, same shift we saw in our own
+late losses (several of our post-deadline losses were 4P).
+
+### #2 place — simjeg — RL + IL, much smaller scale
+Started with hand-crafted heuristics (top 50), switched to **imitation learning on
+replay data** (→ top 10), then **RL fine-tuning** (→ top 5), then **from-scratch
+self-play RL** in the final days (→ 2nd). Only a 4.3M-parameter model (1D-CNN + small
+ModernBERT transformer) — far smaller than #1, proving competitive RL doesn't strictly
+require massive compute. Key point: **the path from heuristic → IL → RL was incremental
+and each step was a leaderboard improvement** — this was a viable path we never explored
+at all (we stayed 100% heuristic the entire competition).
+
+### Top 2% (#72) — Gerardo Del Toro — "GPU Poor, PPO Rich"
+Budget self-play PPO in JAX: local RTX 3070 Ti + **~$25 of rented Vast.ai GPU time**,
+reaching ~750M steps. Simplified all-in/no-op action space, projected 23-step future
+timeline per planet (conceptually identical to our own `forward_project()`/orbit_lite
+garrison simulation). **This is the most damning comparison for us**: a ~$25, single-
+person RL side-project beat our final rank (#72 vs our #648) with less domain-specific
+tuning effort than we put into v1-v36. RL was accessible, not just for well-funded teams.
+
+### Silver medal — sam_the_rice_cake — heuristic improvement of "The Producer V2"
+**Same base agent family we used** (Producer/ProducerLite lineage), and stayed 100%
+non-RL/deterministic — proof our overall architecture choice wasn't wrong, our tuning
+and feature depth just didn't go far enough. Concrete things they added that we didn't:
+- **Production-aware source selection**: rank candidate sources by `ships + w·production·horizon`,
+  not just current ship count — lets high-production planets stay active launch sources
+  even when temporarily low on garrison. We never weighted by production this way.
+- **Focus fire / multi-source pooled attacks**: for targets no single source can crack,
+  greedily sum the smallest prefix of sources (by size, up to 4) that clears the capture
+  floor. Explicitly called "probably one of the most important practical improvements."
+  **We had the same idea** (HAMMER/COALITION, `v33_hammer` "multi-source pile-on") **but
+  ours scored 732 — badly broken** — right concept, bad execution (no principled
+  prefix-sum/threshold selection like theirs).
+- **Hard late-game arrival cutoff**: filter out any candidate launch whose arrival time
+  is ≥ remaining game steps, scored `-inf`. We had a "terminal phase" (last 40 turns,
+  roi=1.0) but not this explicit per-candidate ETA-vs-remaining-steps filter.
+- **More aggressive, validated retuning**: raised `roi_threshold` 1.5→1.751,
+  `min_ships_to_launch` 4.0→7.764, `reinforce_size_beta` 2.2→3.623 (more selective/
+  conservative) — validated via their own local Rust arena with OpenSkill matchmaking
+  simulation. **We tried the same direction** (`v35_tuned`: min_ships=12,
+  drain_frac=0.65) **and it hurt us** (scored 911) — likely because we didn't have as
+  rigorous a local evaluation loop to find the right values, and moved further/faster
+  than the data supported.
+
+### The core takeaway
+Our architecture (deterministic projection/heuristic, Producer-lineage) was validated —
+it's exactly what won Silver. What separated us from medal position wasn't the paradigm,
+it was **execution rigor**: a better local arena for validating parameter changes before
+submitting, more careful multi-source attack logic, and an explicit late-game cutoff.
+Separately, RL was a completely untried, viable path this entire competition — from a
+$25 budget solution beating our final rank to two of the top 3 places using it, "RL
+isn't competitive yet" was a bad premise to have carried through the whole entry.
 
 ---
 

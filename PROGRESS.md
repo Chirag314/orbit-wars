@@ -10,7 +10,15 @@
 
 ---
 
-## 📡 Live Update (Jul 5, 2026) — 2 days left before leaderboard locks
+## 🏁 COMPETITION LOCKED (Jul 8, 2026): Rank #648/4730, Score 1064.9, no medal
+
+Bronze needed rank ≤473 (score 1089.5) — missed by 175 ranks / 24.6 points. Full
+post-mortem including top-solution writeup analysis in
+[FINAL_RESULTS.md](FINAL_RESULTS.md).
+
+---
+
+## 📡 Live Update (Jul 5, 2026) — 2 days left before leaderboard locks (historical, superseded above)
 
 | Metric | Score | Rank | Percentile |
 |---|---|---|---|
